@@ -4,32 +4,27 @@
 #include <string.h>
 #include <math.h>
 #include <stdbool.h>
-
 int findPivot(int* x, int start, int end) {
-	return start;
+	srand(time(NULL));
+	int random = start + (rand()/1) % (end - start + 1);
+	return random;
 }
 int inPaclePartition(int* x, int start, int end, int key) {
-	int i = start + 1;
-	int j = end;
-	while (i <= j) {
-		while (x[key] >= x[i]) {
-			i++;
-		}
-		while (x[key] <= x[j] && j > start) {
-			j--;
-		}
-		if (i > j) {
-			int temp = x[j];
-			x[j] = x[key];
-			x[key] = temp;
-		}
-		else {
-			int temp = x[j];
-			x[j] = x[i];
-			x[i] = temp;
+	int temp = x[key];
+	x[key] = x[end];
+	x[end] = temp;
+	int lock = start;
+	for (int i = start; i < end; i++) {
+		if (x[i] < x[end]) {
+			temp = x[i];
+			x[i] = x[lock];
+			x[lock++] = temp;
 		}
 	}
-	return j;
+	temp = x[lock];
+	x[lock] = x[end];
+	x[end] = temp;
+	return lock;
 }
 void inPlaceQuicksort(int* x, int start, int end) {
 	if (start >= end) {
